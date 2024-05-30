@@ -1,28 +1,58 @@
 import { Pressable, ScrollView, StyleSheet, Text, View, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { getMemoryList } from '../services/BucketService';
 
 
-const HomeScreen = ({navigation}) => {
-     return (
-    <ScrollView style={styles.container}>
-        <Pressable onPress={() => navigation.navigate("Add")}>
-            <Text>Add</Text>
-        </Pressable>
+const HomeScreen = ({ navigation }) => {
+
+    const [memories, setMemories] = useState(null);
+
+    useEffect(() => {
+        const getMemories = async () => {
+            console.log(memories);
+            setMemories(await getMemoryList())
+        }
         
-        {/* Card of your images that you need to loop through */}
-        <View style={styles.card}>
-            <Image
-                style={styles.img}
-                source={{
-                    uri: 'https://reactnative.dev/img/tiny_logo.png',
-                }} />
 
-            <Text>Image Title</Text>
+        const unsubscribe = navigation.addListener('focus', () => {
+            getMemories();
+        });
+
+        return unsubscribe;
+
+    }, [navigation])
+
+    const renderData = async () => {
+        if (!memories) {
+            return <Text>Loading......</Text>
+        }
+
+        return memories.map((data, index) => (
+            <View style={styles.card} key={index}>
+                <Image
+                    style={styles.img}
+                    source={{ uri: data.ImageURL }} />
+
+                <Text>{data.title}</Text>
+            </View>
+        ))
+    }
+
+
+
+    return (
+        <View style={styles.container}>
+            <Pressable onPress={() => navigation.navigate("Add")}>
+                <Text>Add</Text>
+            </Pressable>
+
+            {/* Card of your images that you need to loop through */}
+
+            {renderData()}
+
         </View>
 
-    </ScrollView>
-
-  )
+    )
 }
 
 export default HomeScreen

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import { handleUploadOfImage } from '../services/BucketService';
 
-const AddScreen = () => {
+const AddScreen = ({navigation}) => {
 
     const [title, setTitle] = useState('')
 
@@ -26,8 +26,11 @@ const AddScreen = () => {
     };
 
     //calling out service function to upload image
-    const uplooaImage = () => {
-        handleUploadOfImage(image, title)
+    const uploodImage = () => {
+        handleUploadOfImage(image, title);
+        navigation.navigate('Home');
+        setTitle('');
+        setImage(null);
     }
 
   return (
@@ -45,7 +48,7 @@ const AddScreen = () => {
         <Button title="Pick an image from camera roll" onPress={pickImage} />
         {image && <Image source={{ uri: image }} style={styles.image} />}
 
-        <TouchableOpacity style={styles.button} onPress={uplooaImage}>
+        <TouchableOpacity style={styles.button} onPress={uploodImage}>
             <Text style={styles.buttonText}>Add Memory</Text>
         </TouchableOpacity>
         
