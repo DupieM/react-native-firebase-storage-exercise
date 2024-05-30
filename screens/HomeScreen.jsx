@@ -1,8 +1,9 @@
 import { Pressable, ScrollView, StyleSheet, Text, View, Image } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
+
 
 const HomeScreen = ({navigation}) => {
-  return (
+     return (
     <ScrollView style={styles.container}>
         <Pressable onPress={() => navigation.navigate("Add")}>
             <Text>Add</Text>
